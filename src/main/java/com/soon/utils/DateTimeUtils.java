@@ -5,7 +5,14 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * 时间工具类
+ *
+ * @author HuYiGong
+ */
 public class DateTimeUtils {
+    private DateTimeUtils() {
+    }
 
     /**
      * 获取参数(date)的开始时间
@@ -45,12 +52,5 @@ public class DateTimeUtils {
      */
     public static String format(LocalDateTime dateTime) {
         return dateTime.format(DateTimeFormatter.ISO_DATE_TIME);
-    }
-
-    public static void main(String[] args) {
-        LocalDateTime start = getStartTime(LocalDate.now());
-        LocalDateTime end = getEndTime(LocalDate.now());
-        System.out.println(format(start));
-        System.out.println(format(end));
     }
 }
