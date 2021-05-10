@@ -24,7 +24,8 @@ public class FileUtils {
      * 若过期后则遍历子文件删除过期的子文件
      * 删除文件后，目录为空则删除目录
      *
-     * @param dirPath, effectiveDays]
+     * @param dirPath 待遍历目录
+     * @param effectiveDays 有效的天数
      * @author HuYiGong
      * @date 2021/5/10 14:27
      */
