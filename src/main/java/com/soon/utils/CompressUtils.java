@@ -14,11 +14,10 @@ import java.nio.file.Paths;
  *
  *
  * @author HuYiGong
- * @date 2021/4/21
+ * @since 2021/4/21
  **/
 public class CompressUtils {
-    private CompressUtils() {
-    }
+    private CompressUtils() {}
 
     /**
      * 解压缩
@@ -26,7 +25,7 @@ public class CompressUtils {
      * @param sourceFile 源文件路径(zip,tar)
      * @param targetDir 目标文件夹路径
      * @author HuYiGong
-     * @date 2021/4/21 16:17
+     * @since 2021/4/21 16:17
      */
     public static void decompressor(String sourceFile, String targetDir) throws IOException, ArchiveException {
         File archiveFile = new File(sourceFile);

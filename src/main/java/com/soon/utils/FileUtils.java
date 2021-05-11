@@ -11,11 +11,10 @@ import java.time.ZonedDateTime;
  * 文件工具
  *
  * @author HuYiGong
- * @date 2021/5/10
+ * @since 2021/5/10
  **/
 public class FileUtils {
-    private FileUtils() {
-    }
+    private FileUtils() {}
 
     /**
      * 删除过期文件
@@ -27,7 +26,7 @@ public class FileUtils {
      * @param dirPath 待遍历目录
      * @param effectiveDays 有效的天数
      * @author HuYiGong
-     * @date 2021/5/10 14:27
+     * @since 2021/5/10 14:27
      */
     public static void deleteExpiredFiles(String dirPath, final int effectiveDays) throws IOException {
         Path path = Paths.get(dirPath);

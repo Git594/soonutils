@@ -14,8 +14,7 @@ import java.util.Date;
  * @author HuYiGong
  */
 public class DateTimeUtils {
-    private DateTimeUtils() {
-    }
+    private DateTimeUtils() {}
 
     /**
      * 获取参数(date)的开始时间

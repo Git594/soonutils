@@ -23,7 +23,7 @@ import java.security.NoSuchAlgorithmException;
  * Digit 指定动态密码长度，比如我们常见的都是 6 位长度的动态密码
  *
  * @author HuYiGong
- * @date 2021/4/9
+ * @since 2021/4/9
  **/
 public class Totp {
     /**
@@ -58,7 +58,7 @@ public class Totp {
      * @return com.soon.utils.security.Totp
      *          实例
      * @author HuYiGong
-     * @date 2021/4/9 16:25
+     * @since 2021/4/9 16:25
      */
     public Totp getInstant(String securityKey) {
         return new Totp(securityKey, 0, 30000, 6, 5000);
@@ -73,7 +73,7 @@ public class Totp {
      * @return com.soon.utils.security.Totp
      *          实例
      * @author HuYiGong
-     * @date 2021/4/9 16:31
+     * @since 2021/4/9 16:31
      */
     public Totp getInstant(String securityKey, int step, int digit) {
         if (step == 0) {
@@ -92,7 +92,7 @@ public class Totp {
      * @param customizeTime 自定义时间（时间戳）
      * @return com.soon.utils.security.Totp
      * @author HuYiGong
-     * @date 2021/4/9 16:33
+     * @since 2021/4/9 16:33
      */
     public Totp getInstant(String securityKey, int step, int digit, int flexTime, long customizeTime) {
         if (step == 0) {
@@ -107,7 +107,7 @@ public class Totp {
      * @return java.lang.String
      *          totp结果
      * @author HuYiGong
-     * @date 2021/4/9 18:31
+     * @since 2021/4/9 18:31
      */
     public String generate() throws InvalidKeyException {
         long timeFactor = computeTimeFactor(System.currentTimeMillis());
@@ -122,7 +122,7 @@ public class Totp {
      * @return java.lang.String
      *          totp结果
      * @author HuYiGong
-     * @date 2021/4/9 18:29
+     * @since 2021/4/9 18:29
      */
     private String truncate(byte[] hmacSha1Res) {
         return null;
@@ -135,7 +135,7 @@ public class Totp {
      * @param data 待加密数据
      * @return byte[]
      * @author HuYiGong
-     * @date 2021/4/9 18:28
+     * @since 2021/4/9 18:28
      */
     private byte[] hmacSha1(String key, String data) throws InvalidKeyException {
         try {
@@ -156,7 +156,7 @@ public class Totp {
      * @param targetTime 目标时间戳
      * @return long 时间因子
      * @author HuYiGong
-     * @date 2021/4/9 16:48
+     * @since 2021/4/9 16:48
      */
     private long computeTimeFactor(long targetTime) {
         return (targetTime - customizeTime) / step;
