@@ -19,7 +19,7 @@ public class BeanUtils {
      * @author HuYiGong
      * @since 2021/5/11
      */
-    public static void Copy(Object source, Object target) {
+    public static void copy(Object source, Object target) {
         BeanCopier copier = BeanCopier.create(source.getClass(), target.getClass(), false);
         copier.copy(source, target, null);
     }
@@ -33,7 +33,7 @@ public class BeanUtils {
      * @author HuYiGong
      * @since 2021/5/11
      */
-    public static void Copy(Object source, Object target, Converter converter) {
+    public static void copy(Object source, Object target, Converter converter) {
         BeanCopier copier = BeanCopier.create(source.getClass(), target.getClass(), true);
         copier.copy(source, target, converter);
     }
