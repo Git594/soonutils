@@ -63,7 +63,4 @@ public class FileUtils {
         });
     }
 
-    public static void main(String[] args) throws IOException {
-        deleteExpiredFiles("D:\\temp\\dossier", 20);
-    }
 }
