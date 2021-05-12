@@ -1,11 +1,14 @@
 package com.soon.utils;
 
+import com.soon.utils.consts.Tips;
+
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 /**
  * 文件工具
@@ -29,6 +32,8 @@ public class FileUtils {
      * @since 2021/5/10 14:27
      */
     public static void deleteExpiredFiles(String dirPath, final int effectiveDays) throws IOException {
+        Objects.requireNonNull(dirPath, String.format(Tips.PARAMS_NOT_NULL, "dirPath"));
+        Objects.requireNonNull(dirPath, String.format(Tips.PARAMS_NOT_NULL, "effectiveDays"));
         Path path = Paths.get(dirPath);
         Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
             @Override

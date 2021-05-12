@@ -1,11 +1,12 @@
 package com.soon.utils;
 
-import com.sun.istack.internal.NotNull;
+import com.soon.utils.consts.Tips;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -24,7 +25,8 @@ public class RequestUtils {
      * @author HuYiGong
      * @since 2021/5/12
      */
-    public static String getRealIp(@NotNull HttpServletRequest request) {
+    public static String getRealIp(HttpServletRequest request) {
+        Objects.requireNonNull(request, String.format(Tips.PARAMS_NOT_NULL, "request"));
         String unknown = "unknown";
         String ipAddress = request.getHeader("x-forwarded-for");
         if (StringUtils.isBlank(ipAddress) || unknown.equalsIgnoreCase(ipAddress)) {

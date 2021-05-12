@@ -1,7 +1,10 @@
 package com.soon.utils;
 
+import com.soon.utils.consts.Tips;
 import net.sf.cglib.beans.BeanCopier;
 import net.sf.cglib.core.Converter;
+
+import java.util.Objects;
 
 /**
  * Created on 2021/5/11.
@@ -20,6 +23,8 @@ public class BeanUtils {
      * @since 2021/5/11
      */
     public static void copy(Object source, Object target) {
+        Objects.requireNonNull(source, String.format(Tips.PARAMS_NOT_NULL, "source"));
+        Objects.requireNonNull(source, String.format(Tips.PARAMS_NOT_NULL, "target"));
         BeanCopier copier = BeanCopier.create(source.getClass(), target.getClass(), false);
         copier.copy(source, target, null);
     }
@@ -34,6 +39,9 @@ public class BeanUtils {
      * @since 2021/5/11
      */
     public static void copy(Object source, Object target, Converter converter) {
+        Objects.requireNonNull(source, String.format(Tips.PARAMS_NOT_NULL, "source"));
+        Objects.requireNonNull(target, String.format(Tips.PARAMS_NOT_NULL, "target"));
+        Objects.requireNonNull(converter, String.format(Tips.PARAMS_NOT_NULL, "converter"));
         BeanCopier copier = BeanCopier.create(source.getClass(), target.getClass(), true);
         copier.copy(source, target, converter);
     }
