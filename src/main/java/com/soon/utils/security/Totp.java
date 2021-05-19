@@ -63,7 +63,7 @@ public class Totp {
      * @param code 动态密码
      * @return boolean
      * @author HuYiGong
-     * @date 2021/5/14 17:21
+     * @since 2021/5/14 17:21
      */
     public boolean verifyFlexibly(String userName, String password, String code) {
         Totp totp = getInstant(securityKey + userName + password);
@@ -136,6 +136,7 @@ public class Totp {
      *          totp结果
      * @author HuYiGong
      * @since 2021/4/9 18:31
+     * @throws InvalidKeyException 加密方法名（HmacSHA1）错误时抛出
      */
     public String generate() throws InvalidKeyException {
         long timeFactor = computeTimeFactor(System.currentTimeMillis());
@@ -149,7 +150,8 @@ public class Totp {
      * @return java.lang.String
      *          totp结果
      * @author HuYiGong
-     * @date 2021/4/9 18:31
+     * @since 2021/4/9 18:31
+     * @throws InvalidKeyException 加密方法名（HmacSHA1）错误时抛出
      */
     public String generateFlexibly() throws InvalidKeyException {
         long timeFactor = computeTimeFactor(System.currentTimeMillis() - flexedTime);

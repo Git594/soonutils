@@ -18,7 +18,7 @@ public class NumberUtils {
      * @param digit 位数
      * @return java.lang.String 补零后的字符串
      * @author HuYiGong
-     * @date 2021/5/14 16:40
+     * @since 2021/5/14 16:40
      */
     public static String fillZero(long number, int digit) {
         NumberFormat format = NumberFormat.getInstance();
