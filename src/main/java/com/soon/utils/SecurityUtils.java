@@ -7,5 +7,5 @@ package com.soon.utils;
  * @since 2021/4/9
  **/
 public class SecurityUtils {
-
+    private SecurityUtils() {}
 }

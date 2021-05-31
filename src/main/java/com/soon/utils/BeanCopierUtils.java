@@ -11,8 +11,8 @@ import java.util.Objects;
  *
  * @author Soon
  */
-public class BeanUtils {
-    private BeanUtils() {}
+public class BeanCopierUtils {
+    private BeanCopierUtils() {}
 
     /**
      * 从源对象中拷贝属性到目标属性中，只会拷贝类型和名称完全相同的属性
