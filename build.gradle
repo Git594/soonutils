@@ -6,6 +6,7 @@ group 'org.example'
 version '1.0'
 
 repositories {
+    flatDir {dirs 'lib'}
     mavenCentral()
 }
 
@@ -14,6 +15,7 @@ dependencies {
     implementation 'org.apache.commons:commons-compress:1.18'
     implementation 'cglib:cglib:3.3.0'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation fileTree(dir: "lib", includes: ['*.jar', '*/*.jar', '*/*/*.jar'])
     compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
     compileOnly 'org.springframework.boot:spring-boot-starter-web:2.2.0.RELEASE'
 }

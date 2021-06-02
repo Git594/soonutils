@@ -16,6 +16,6 @@ public class UidGenerator {
      * @since 2021/5/13
      */
     public static String getCleanUid() {
-        return UUID.randomUUID().toString().replaceAll("-", "");
+        return UUID.randomUUID().toString().replace("-", "");
     }
 }

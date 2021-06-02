@@ -1,4 +1,4 @@
-package com.soon.utils;
+package com.soon.utils.http;
 
 import com.soon.utils.consts.Tips;
 import org.apache.commons.lang3.StringUtils;

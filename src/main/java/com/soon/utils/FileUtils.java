@@ -1,8 +1,14 @@
 package com.soon.utils;
 
 import com.soon.utils.consts.Tips;
+import info.monitorenter.cpdetector.io.*;
+import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
@@ -66,6 +72,58 @@ public class FileUtils {
                 return FileVisitResult.CONTINUE;
             }
         });
+    }
+
+    /**
+     * 获取文件扩展名
+     *
+     * @param fileName 文件名
+     * @return java.lang.String 扩展名
+     * @author HuYiGong
+     * @since 2021/6/1 17:16
+     */
+    public static String getFileExtension(String fileName) {
+        if (StringUtils.isBlank(fileName)) {
+            return null;
+        }
+        int index = fileName.lastIndexOf('.') + 1;
+        if (index >= fileName.length()) {
+            return null;
+        }
+        return fileName.substring(index);
+    }
+
+    /**
+     * 获取编码格式
+     *
+     * @param filePath 文件路径
+     * @return java.nio.charset.Charset
+     *         编码格式
+     *         若未判断出编码格式，会返回默认编码格式
+     * @author HuYiGong
+     * @since 2021/6/2 11:06
+     */
+    public static Charset getFileEncoding(String filePath) {
+        // Create the proxy:
+        CodepageDetectorProxy detector = CodepageDetectorProxy.getInstance();
+        // Add the implementations of info.monitorenter.cpdetector.io.ICodepageDetector:
+        // This one is quick if we deal with unicode codepages:
+        detector.add(new ByteOrderMarkDetector());
+        // The first instance delegated to tries to detect the meta charset attribut in html pages.
+        detector.add(new ParsingDetector(true));
+        // This one does the tricks of exclusion and frequency detection, if first implementation is
+        // unsuccessful:
+        detector.add(JChardetFacade.getInstance());
+        detector.add(ASCIIDetector.getInstance());
+        Path path = Paths.get(filePath);
+        // Work with the configured proxy:
+        java.nio.charset.Charset charset = Charset.defaultCharset();
+        try {
+            charset = detector.detectCodepage(path.toUri().toURL());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return charset;
     }
 
 }
