@@ -114,15 +114,4 @@ public class CompressUtils {
             }
         }
     }
-
-    public static void main(String[] args) {
-        try {
-            decompressor("D:\\飞秋文件\\张述江(6C4B90F6BE70)\\utf-8.zip", "C:\\Users\\Dae\\Desktop\\test");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ArchiveException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
