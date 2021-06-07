@@ -6,6 +6,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.soon.utils.consts.Tips;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
 import java.util.Map;
@@ -34,11 +36,15 @@ public class Token {
      * @author HuYiGong
      * @since 2021/5/31 11:31
      */
-    public static Token getInstance(String securityKey, long expireTime) {
+    public static Token getInstance(String secretKey, long expireTime) {
+        Objects.requireNonNull(secretKey, String.format(Tips.PARAMS_CANNOT_BE_NULL, "secretKey"));
+        if (expireTime > 0) {
+            throw new IllegalArgumentException(String.format(Tips.ILLEGAL_PARAMETER, "expireTime"));
+        }
         if (Objects.isNull(instance)) {
             synchronized (Token.class) {
                 if (Objects.isNull(instance)) {
-                    instance = new Token(securityKey, expireTime);
+                    instance = new Token(secretKey, expireTime);
                 }
             }
         }
@@ -74,6 +80,9 @@ public class Token {
      * @since 2021/6/3 15:06
      */
     public boolean verify(String token) {
+        if (StringUtils.isBlank(token)) {
+            throw new IllegalArgumentException(String.format(Tips.ILLEGAL_PARAMETER, "token"));
+        }
         try {
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
             JWTVerifier verifier = JWT.require(algorithm).build();
@@ -96,6 +105,9 @@ public class Token {
      * @since 2021/6/3 15:15
      */
     public Claim getClaim(String token, String key) {
+        if (StringUtils.isBlank(token)) {
+            throw new IllegalArgumentException(String.format(Tips.ILLEGAL_PARAMETER, "token"));
+        }
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         JWTVerifier verifier = JWT.require(algorithm).build();
         DecodedJWT decodedJwt = verifier.verify(token);

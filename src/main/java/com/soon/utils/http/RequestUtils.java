@@ -26,7 +26,7 @@ public class RequestUtils {
      * @since 2021/5/12
      */
     public static String getRealIp(HttpServletRequest request) {
-        Objects.requireNonNull(request, String.format(Tips.PARAMS_NOT_NULL, "request"));
+        Objects.requireNonNull(request, String.format(Tips.PARAMS_CANNOT_BE_NULL, "request"));
         String unknown = "unknown";
         String ipAddress = request.getHeader("x-forwarded-for");
         if (StringUtils.isBlank(ipAddress) || unknown.equalsIgnoreCase(ipAddress)) {

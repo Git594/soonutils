@@ -23,8 +23,8 @@ public class BeanCopierUtils {
      * @since 2021/5/11
      */
     public static void copy(Object source, Object target) {
-        Objects.requireNonNull(source, String.format(Tips.PARAMS_NOT_NULL, "source"));
-        Objects.requireNonNull(source, String.format(Tips.PARAMS_NOT_NULL, "target"));
+        Objects.requireNonNull(source, String.format(Tips.PARAMS_CANNOT_BE_NULL, "source"));
+        Objects.requireNonNull(source, String.format(Tips.PARAMS_CANNOT_BE_NULL, "target"));
         BeanCopier copier = BeanCopier.create(source.getClass(), target.getClass(), false);
         copier.copy(source, target, null);
     }
@@ -39,9 +39,9 @@ public class BeanCopierUtils {
      * @since 2021/5/11
      */
     public static void copy(Object source, Object target, Converter converter) {
-        Objects.requireNonNull(source, String.format(Tips.PARAMS_NOT_NULL, "source"));
-        Objects.requireNonNull(target, String.format(Tips.PARAMS_NOT_NULL, "target"));
-        Objects.requireNonNull(converter, String.format(Tips.PARAMS_NOT_NULL, "converter"));
+        Objects.requireNonNull(source, String.format(Tips.PARAMS_CANNOT_BE_NULL, "source"));
+        Objects.requireNonNull(target, String.format(Tips.PARAMS_CANNOT_BE_NULL, "target"));
+        Objects.requireNonNull(converter, String.format(Tips.PARAMS_CANNOT_BE_NULL, "converter"));
         BeanCopier copier = BeanCopier.create(source.getClass(), target.getClass(), true);
         copier.copy(source, target, converter);
     }

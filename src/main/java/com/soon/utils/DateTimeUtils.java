@@ -30,7 +30,7 @@ public class DateTimeUtils {
      * @since 2021/3/23
      */
     public static LocalDateTime getStartTime(LocalDate date) {
-        Objects.requireNonNull(date, String.format(Tips.PARAMS_NOT_NULL, "date"));
+        Objects.requireNonNull(date, String.format(Tips.PARAMS_CANNOT_BE_NULL, "date"));
         return LocalDateTime.of(date, LocalTime.MIN);
     }
 
@@ -45,7 +45,7 @@ public class DateTimeUtils {
      * @since 2021/3/23
      */
     public static LocalDateTime getEndTime(LocalDate date) {
-        Objects.requireNonNull(date, String.format(Tips.PARAMS_NOT_NULL, "date"));
+        Objects.requireNonNull(date, String.format(Tips.PARAMS_CANNOT_BE_NULL, "date"));
         return LocalDateTime.of(date, LocalTime.MAX);
     }
 
@@ -58,7 +58,7 @@ public class DateTimeUtils {
      * @since 2021/3/23
      */
     public static String format(LocalDateTime dateTime) {
-        Objects.requireNonNull(dateTime, String.format(Tips.PARAMS_NOT_NULL, "dateTime"));
+        Objects.requireNonNull(dateTime, String.format(Tips.PARAMS_CANNOT_BE_NULL, "dateTime"));
         return dateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
     }
 
@@ -72,8 +72,8 @@ public class DateTimeUtils {
      * @since 2021/5/11
      */
     public static String format(LocalDateTime dateTime, String pattern) {
-        Objects.requireNonNull(dateTime, String.format(Tips.PARAMS_NOT_NULL, "dateTime"));
-        Objects.requireNonNull(pattern, String.format(Tips.PARAMS_NOT_NULL, "pattern"));
+        Objects.requireNonNull(dateTime, String.format(Tips.PARAMS_CANNOT_BE_NULL, "dateTime"));
+        Objects.requireNonNull(pattern, String.format(Tips.PARAMS_CANNOT_BE_NULL, "pattern"));
         return dateTime.format(DateTimeFormatter.ofPattern(pattern));
     }
 
@@ -86,7 +86,7 @@ public class DateTimeUtils {
      * @since 2021/5/11
      */
     public static LocalDateTime getStartTimeOfMonth(LocalDate date) {
-        Objects.requireNonNull(date, String.format(Tips.PARAMS_NOT_NULL, "date"));
+        Objects.requireNonNull(date, String.format(Tips.PARAMS_CANNOT_BE_NULL, "date"));
         return date.withDayOfMonth(1).atStartOfDay();
     }
 
@@ -99,7 +99,7 @@ public class DateTimeUtils {
      * @since 2021/5/11
      */
     public static LocalDateTime getStartTimeOfYear(LocalDate date) {
-        Objects.requireNonNull(date, String.format(Tips.PARAMS_NOT_NULL, "date"));
+        Objects.requireNonNull(date, String.format(Tips.PARAMS_CANNOT_BE_NULL, "date"));
         return date.withDayOfYear(1).atStartOfDay();
     }
 
@@ -112,7 +112,7 @@ public class DateTimeUtils {
      * @since 2021/5/11
      */
     public static Date toDate(LocalDateTime dateTime) {
-        Objects.requireNonNull(dateTime, String.format(Tips.PARAMS_NOT_NULL, "dateTime"));
+        Objects.requireNonNull(dateTime, String.format(Tips.PARAMS_CANNOT_BE_NULL, "dateTime"));
         return Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 
@@ -125,7 +125,7 @@ public class DateTimeUtils {
      * @since 2021/5/11
      */
     public static LocalDateTime toLocalDateTime(Date date) {
-        Objects.requireNonNull(date, String.format(Tips.PARAMS_NOT_NULL, "date"));
+        Objects.requireNonNull(date, String.format(Tips.PARAMS_CANNOT_BE_NULL, "date"));
         return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
     }
 }

@@ -35,8 +35,8 @@ public class FileUtils {
      * @since 2021/5/10 14:27
      */
     public static void deleteExpiredFiles(String dirPath, final int effectiveDays) throws IOException {
-        Objects.requireNonNull(dirPath, String.format(Tips.PARAMS_NOT_NULL, "dirPath"));
-        Objects.requireNonNull(dirPath, String.format(Tips.PARAMS_NOT_NULL, "effectiveDays"));
+        Objects.requireNonNull(dirPath, String.format(Tips.PARAMS_CANNOT_BE_NULL, "dirPath"));
+        Objects.requireNonNull(dirPath, String.format(Tips.PARAMS_CANNOT_BE_NULL, "effectiveDays"));
         Path path = Paths.get(dirPath);
         Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
             @Override
