@@ -2,9 +2,6 @@ package com.soon.utils;
 
 import com.soon.utils.consts.Tips;
 import org.apache.commons.compress.archivers.*;
-import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
-import org.apache.commons.compress.compressors.CompressorOutputStream;
-import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -12,7 +9,10 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -205,9 +205,5 @@ public class CompressUtils {
                 }
             });
         }
-    }
-
-    public static void main(String[] args) throws IOException, ArchiveException {
-        compress("D:\\飞秋文件\\李娟(94C691828D4C)", new File("D:\\Test\\test.zip"));
     }
 }

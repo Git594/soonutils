@@ -2,11 +2,10 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
+group 'com.soon'
 version '1.0'
 
 repositories {
-    flatDir {dirs 'lib'}
     mavenCentral()
 }
 
@@ -16,9 +15,11 @@ dependencies {
     implementation 'cglib:cglib:3.3.0'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'com.auth0:java-jwt:3.16.0'
+    implementation 'com.alibaba:fastjson:1.2.76'
     implementation fileTree(dir: "lib", includes: ['*.jar', '*/*.jar', '*/*/*.jar'])
-    compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
-    compileOnly 'org.springframework.boot:spring-boot-starter-web:2.2.0.RELEASE'
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.2.0.RELEASE'
+
 }
 
 test {
