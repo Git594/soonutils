@@ -4,14 +4,17 @@ import com.soon.utils.consts.Tips;
 import info.monitorenter.cpdetector.io.*;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 文件工具
@@ -123,4 +126,75 @@ public class FileUtils {
         return charset;
     }
 
+    /**
+     * 分割文件
+     *
+     * @param sourcePath 原文件路径
+     * @param targetDir 目标文件路径
+     * @param perSize 每个分割文件大小
+     * @author HuYiGong
+     * @since 2021/6/9 18:44
+     */
+    public static void splitFile(String sourcePath, String targetDir, long perSize) throws IOException {
+        if (StringUtils.isBlank(sourcePath) || !Files.isRegularFile(Paths.get(sourcePath))) {
+            throw new IllegalArgumentException(String.format(Tips.ILLEGAL_PARAMETER, "sourcePath"));
+        }
+        if (StringUtils.isBlank(targetDir)) {
+            throw new IllegalArgumentException(String.format(Tips.ILLEGAL_PARAMETER, "targetDir"));
+        }
+        if (perSize <= 0) {
+            throw new IllegalArgumentException(String.format(Tips.ILLEGAL_PARAMETER, "perSize"));
+        }
+        Path sourceFile = Paths.get(sourcePath);
+        Path targetFile = Paths.get(targetDir);
+        long count = (long) Math.ceil(Files.size(sourceFile)/(double)perSize);
+        if (!Files.exists(targetFile)) {
+            Files.createDirectories(targetFile);
+        }
+        try (FileChannel sourceChannel = FileChannel.open(sourceFile)) {
+            for (long i = 0; i < count; i++) {
+                long next = i + 1;
+                Path temp = Files.createFile(targetFile.resolve(String.valueOf(next)));
+                try (FileChannel destChannel = FileChannel.open(temp, StandardOpenOption.WRITE)) {
+                    destChannel.transferFrom(sourceChannel, 0, perSize);
+                }
+            }
+        }
+    }
+
+    /**
+     * 将给定文件集合进行合并，并将合并后的文件放到目标路径，删除给定的文件集合
+     * 给定文件集合的文件按照索引排序
+     *
+     * @param files 文件集合
+     * @param destPath 目标路径
+     * @author HuYiGong
+     * @date 2021/3/24 15:54
+     */
+    public static void mergeFile(Collection<File> files, String destPath) throws IOException {
+        if (Objects.isNull(files) || files.isEmpty()) {
+            throw new IllegalArgumentException(String.format(Tips.ILLEGAL_PARAMETER, "files"));
+        }
+        if (StringUtils.isBlank(destPath)) {
+            throw new IllegalArgumentException(String.format(Tips.ILLEGAL_PARAMETER, "destPath"));
+        }
+        // 按照文件名称排序
+        List<File> orderedFiles = files.parallelStream().sorted(
+                Comparator.comparingInt(file -> Integer.parseInt(file.getName()))).collect(Collectors.toList());
+        Path path = Files.createFile(Paths.get(destPath));
+        try (FileChannel resultFileChannel = FileChannel.open(path, StandardOpenOption.WRITE)) {
+            for (File file : orderedFiles) {
+                if (!file.exists() || file.isDirectory()) {
+                    throw new IllegalArgumentException(String.format(Tips.ILLEGAL_PARAMETER, "files"));
+                }
+                try (FileChannel sourceFileChannel = FileChannel.open(file.toPath())) {
+                    sourceFileChannel.transferTo(0, sourceFileChannel.size(), resultFileChannel);
+                }
+            }
+        }
+        // 删除临时文件
+        for (File file : orderedFiles) {
+            Files.delete(file.toPath());
+        }
+    }
 }

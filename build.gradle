@@ -17,9 +17,8 @@ dependencies {
     implementation 'com.auth0:java-jwt:3.16.0'
     implementation 'com.alibaba:fastjson:1.2.76'
     implementation fileTree(dir: "lib", includes: ['*.jar', '*/*.jar', '*/*/*.jar'])
-    implementation 'javax.servlet:javax.servlet-api:4.0.1'
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.2.0.RELEASE'
-
+    compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
+    compileOnly 'org.springframework.boot:spring-boot-starter-web:2.2.0.RELEASE'
 }
 
 test {

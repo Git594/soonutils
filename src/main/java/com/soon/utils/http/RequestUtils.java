@@ -12,17 +12,16 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.lang.Nullable;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created on 2021/5/12.
@@ -88,6 +87,33 @@ public class RequestUtils {
     }
 
     /**
+     * 根据超时时间，获取RestTemplate实例
+     *
+     * @param timeout 超时时间
+     * @return org.springframework.web.client.RestTemplate 实例
+     * @author HuYiGong
+     * @since 2021/6/7 9:11
+     */
+    public static RestTemplate getRestTemplate(int timeout) {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setReadTimeout(timeout);
+        factory.setConnectTimeout(timeout);
+        return new RestTemplate(factory);
+    }
+
+    /**
+     * 根据超时时间，获取RestTemplate实例
+     *
+     * @param factory org.springframework.http.client.ClientHttpRequestFactory
+     * @return org.springframework.web.client.RestTemplate 实例
+     * @author HuYiGong
+     * @since 2021/6/7 9:11
+     */
+    public static RestTemplate getRestTemplate(ClientHttpRequestFactory factory) {
+        return new RestTemplate(factory);
+    }
+
+    /**
      * 发起post请求
      *
      * @param url 接口地址
@@ -109,7 +135,7 @@ public class RequestUtils {
         long start = System.currentTimeMillis();
         try {
             return getRestTemplate().postForObject(url, bodyParam, responseType);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.error(Logs.HTTP_ERROR_LOG, url, JSON.toJSONString(bodyParam), ExceptionUtils.getStackTrace(e));
         } finally {
             log.info(Logs.HTTP_INFO_LOG, url, System.currentTimeMillis() - start);
@@ -143,7 +169,7 @@ public class RequestUtils {
         long start = System.currentTimeMillis();
         try {
             return getRestTemplate().postForObject(url, bodyParam, responseType, uriVariables);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.error(Logs.HTTP_ERROR_LOG, getUri(url, uriVariables), JSON.toJSONString(bodyParam), ExceptionUtils.getStackTrace(e));
         } finally {
             log.info(Logs.HTTP_INFO_LOG, url, System.currentTimeMillis() - start);
@@ -169,7 +195,7 @@ public class RequestUtils {
         long start = System.currentTimeMillis();
         try {
             return getRestTemplate().getForObject(url, responseType);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.error(Logs.HTTP_ERROR_LOG, url, null, ExceptionUtils.getStackTrace(e));
         } finally {
             log.info(Logs.HTTP_INFO_LOG, url, System.currentTimeMillis() - start);
@@ -198,7 +224,7 @@ public class RequestUtils {
         long start = System.currentTimeMillis();
         try {
             return getRestTemplate().getForObject(url, responseType, uriVariables);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.error(Logs.HTTP_ERROR_LOG, getUri(url, uriVariables), null, ExceptionUtils.getStackTrace(e));
         } finally {
             log.info(Logs.HTTP_INFO_LOG, url, System.currentTimeMillis() - start);
@@ -220,7 +246,7 @@ public class RequestUtils {
      */
     @Nullable
     public static <T> T exchange(String url, HttpMethod method, @Nullable HttpEntity<?> requestEntity,
-                                 ParameterizedTypeReference<T> responseType) {
+                                 ParameterizedTypeReference<T> responseType, Object... uriVariables) {
         if (StringUtils.isBlank(url)) {
             throw new IllegalArgumentException(String.format(Tips.ILLEGAL_PARAMETER, "url"));
         }
@@ -232,15 +258,15 @@ public class RequestUtils {
         }
         long start = System.currentTimeMillis();
         try {
-            ResponseEntity<T> entity = getRestTemplate().exchange(url, method, requestEntity, responseType);
+            ResponseEntity<T> entity = getRestTemplate().exchange(url, method, requestEntity, responseType, uriVariables);
             if (HttpStatus.OK.equals(entity.getStatusCode())) {
                 return entity.getBody();
             } else {
                 if (log.isDebugEnabled()) {
-                    log.error(Logs.HTTP_ERROR_LOG, url, JSON.toJSONString(requestEntity), JSON.toJSONString(entity));
+                    log.error(Logs.HTTP_ERROR_LOG, getUri(url, uriVariables), JSON.toJSONString(requestEntity), JSON.toJSONString(entity));
                 }
             }
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.error(Logs.HTTP_ERROR_LOG, url, JSON.toJSONString(requestEntity), ExceptionUtils.getStackTrace(e));
         } finally {
             log.info(Logs.HTTP_INFO_LOG, url, System.currentTimeMillis() - start);
@@ -256,14 +282,14 @@ public class RequestUtils {
      * @param requestEntity 请求实体
      * @param responseType 响应类型
      * @param uriVariables url参数
-     * @return T 对应的响应结果
+     * @return ResponseEntity<T> 对应的响应结果
      *         null 请求出错时
      * @author HuYiGong
      * @since 2021/6/7 17:10
      */
     @Nullable
-    public static <T> T exchange(String url, HttpMethod method, @Nullable HttpEntity<?> requestEntity,
-                                 ParameterizedTypeReference<T> responseType, Map<String, ?> uriVariables) {
+    public static <T> ResponseEntity<T> exchangeEntity(String url, HttpMethod method, @Nullable HttpEntity<?> requestEntity,
+                                 ParameterizedTypeReference<T> responseType, Object... uriVariables) {
         if (StringUtils.isBlank(url)) {
             throw new IllegalArgumentException(String.format(Tips.ILLEGAL_PARAMETER, "url"));
         }
@@ -278,15 +304,8 @@ public class RequestUtils {
         }
         long start = System.currentTimeMillis();
         try {
-            ResponseEntity<T> entity = getRestTemplate().exchange(url, method, requestEntity, responseType, uriVariables);
-            if (HttpStatus.OK.equals(entity.getStatusCode())) {
-                return entity.getBody();
-            } else {
-                if (log.isDebugEnabled()) {
-                    log.error(Logs.HTTP_ERROR_LOG, getUri(url, uriVariables), JSON.toJSONString(requestEntity), JSON.toJSONString(entity));
-                }
-            }
-        } catch (Exception e) {
+            return getRestTemplate().exchange(url, method, requestEntity, responseType, uriVariables);
+        } catch (RuntimeException e) {
             log.error(Logs.HTTP_ERROR_LOG, getUri(url, uriVariables), JSON.toJSONString(requestEntity), ExceptionUtils.getStackTrace(e));
         } finally {
             log.info(Logs.HTTP_INFO_LOG, url, System.currentTimeMillis() - start);
@@ -296,6 +315,33 @@ public class RequestUtils {
 
     /**
      * 获取uri
+     * 例如：
+     * url：https://192.168.1.3/{test}?abc=2
+     * uriVariables: {"test":"hello"}
+     * result：https://192.168.1.3/hello?abc=2 对应的URI
+     *
+     * @param url 接口地址
+     * @param uriVariables url参数
+     * @return java.net.URI
+     * @author HuYiGong
+     * @since 2021/6/9 9:47
+     */
+    public static URI getUri(String url, Object... uriVariables) {
+        if (StringUtils.isBlank(url)) {
+            throw new IllegalArgumentException(String.format(Tips.ILLEGAL_PARAMETER, "url"));
+        }
+        if (Objects.isNull(uriVariables)) {
+            throw new IllegalArgumentException(String.format(Tips.ILLEGAL_PARAMETER, "uriVariables"));
+        }
+        return getRestTemplate().getUriTemplateHandler().expand(url, uriVariables);
+    }
+
+    /**
+     * 获取uri
+     * 例如：
+     * url：https://192.168.1.3/{test}?abc=2
+     * uriVariables: {"test":"hello"}
+     * result：https://192.168.1.3/hello?abc=2 对应的URI
      *
      * @param url 接口地址
      * @param uriVariables url参数
@@ -303,15 +349,36 @@ public class RequestUtils {
      * @author HuYiGong
      * @since 2021/6/7 15:46
      */
-    private static URI getUri(String url, Map<String, ?> uriVariables) {
+    public static URI getUri(String url, Map<String, ?> uriVariables) {
         if (StringUtils.isBlank(url)) {
             throw new IllegalArgumentException(String.format(Tips.ILLEGAL_PARAMETER, "url"));
         }
         if (Objects.isNull(uriVariables)) {
             throw new IllegalArgumentException(String.format(Tips.ILLEGAL_PARAMETER, "uriVariables"));
         }
-        DefaultUriBuilderFactory uriFactory = new DefaultUriBuilderFactory();
-        uriFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.URI_COMPONENT);
-        return uriFactory.expand(url, uriVariables);
+        return getRestTemplate().getUriTemplateHandler().expand(url, uriVariables);
+    }
+
+    /**
+     * 验证连通性，只有GET，POST，PUT，DELETE请求可以通过验证
+     *
+     * @param url 接口地址
+     * @param timeout 超时时间
+     * @param uriVariables uri参数
+     * @return boolean 是否连通
+     * @author HuYiGong
+     * @since 2021/6/8 9:41
+     */
+    public static boolean verifyConnectivity(String url, int timeout, Object... uriVariables) {
+        if (StringUtils.isBlank(url)) {
+            throw new IllegalArgumentException(String.format(Tips.ILLEGAL_PARAMETER, url));
+        }
+        try {
+            Set<HttpMethod> optionsForAllow = getRestTemplate(timeout).optionsForAllow(url, uriVariables);
+            HttpMethod[] supportedMethods = {HttpMethod.OPTIONS, HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE};
+            return Arrays.asList(supportedMethods).containsAll(optionsForAllow);
+        } catch (RuntimeException e) {
+            return false;
+        }
     }
 }
