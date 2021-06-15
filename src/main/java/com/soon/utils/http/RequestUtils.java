@@ -375,8 +375,8 @@ public class RequestUtils {
         }
         try {
             Set<HttpMethod> optionsForAllow = getRestTemplate(timeout).optionsForAllow(url, uriVariables);
-            HttpMethod[] supportedMethods = {HttpMethod.OPTIONS, HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE};
-            return Arrays.asList(supportedMethods).containsAll(optionsForAllow);
+            HttpMethod[] supportedMethods = {HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE};
+            return Arrays.stream(supportedMethods).anyMatch(optionsForAllow::contains);
         } catch (RuntimeException e) {
             return false;
         }
