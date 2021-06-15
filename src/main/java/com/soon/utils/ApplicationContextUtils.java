@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
+ * 应用上下文工具类
+ *
  * @author soon
  * @since 2021/05/28
  */
@@ -16,27 +18,7 @@ import java.util.Objects;
 public class ApplicationContextUtils implements ApplicationContextAware {
     private ApplicationContextUtils() {}
 
-    private static ApplicationContextUtils instance;
-
-    private ApplicationContext applicationContext;
-
-    /**
-     * 获取实例
-     *
-     * @return com.soon.utils.ApplicationContextUtils 实例
-     * @author HuYiGong
-     * @since 2021/5/31 11:31
-     */
-    public static ApplicationContextUtils getInstance() {
-        if (Objects.isNull(instance)) {
-            synchronized (ApplicationContextUtils.class) {
-                if (Objects.isNull(instance)) {
-                    instance = new ApplicationContextUtils();
-                }
-            }
-        }
-        return instance;
-    }
+    private static ApplicationContext applicationContext;
 
     /**
      * 设置context，只能设置一次，设置后不能再次修改
@@ -64,7 +46,7 @@ public class ApplicationContextUtils implements ApplicationContextAware {
      * @author HuYiGong
      * @since 2021/5/31 11:38
      */
-    public Object getBean (String name) {
+    public static Object getBean (String name) {
         return applicationContext.getBean(name);
     }
 
@@ -76,7 +58,7 @@ public class ApplicationContextUtils implements ApplicationContextAware {
      * @author HuYiGong
      * @since 2021/5/31 11:42
      */
-    public <T> T getBean (Class<T> clazz) {
+    public static <T> T getBean (Class<T> clazz) {
         return applicationContext.getBean(clazz);
     }
 
@@ -88,7 +70,7 @@ public class ApplicationContextUtils implements ApplicationContextAware {
      * @author HuYiGong
      * @since 2021/5/31 11:47
      */
-    public <T> Map<String, T> getBeansOfType(Class<T> clazz) {
+    public static <T> Map<String, T> getBeansOfType(Class<T> clazz) {
         return applicationContext.getBeansOfType(clazz);
     }
 }
