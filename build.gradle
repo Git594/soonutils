@@ -10,7 +10,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'commons-codec:commons-codec:1.15'
     implementation 'org.apache.commons:commons-compress:1.18'
     implementation 'cglib:cglib:3.3.0'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
