@@ -198,5 +198,16 @@ public class FileUtils {
         }
     }
 
-
+    /**
+     * 如果文件夹不存在则创建，会创建整个路径的所有文件夹
+     *
+     * @param path 文件夹路径
+     * @author HuYiGong
+     * @since 2021/7/8 10:55
+     */
+    public static void createDirectoriesIfNotExist(Path path) throws IOException {
+        if (!Files.exists(path)) {
+            Files.createDirectories(path);
+        }
+    }
 }
